@@ -6,8 +6,7 @@ import 'package:my_app/views/products/product_list.dart';
 
 void main() => runApp(MyApp());
 
-
-class MyApp extends StatelessWidget{
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,10 +18,7 @@ class MyApp extends StatelessWidget{
         'productList': (context) => ProductList(),
         'productForm': (context) => ProductForm(),
       },
-      theme: ThemeData(
-        primaryColor: Colors.blue
-      ),
+      theme: ThemeData(primaryColor: Colors.blue),
     );
   }
-
 }

@@ -22,7 +22,6 @@ class _ProductFormState extends State<ProductForm> {
 
   @override
   Widget build(BuildContext context) {
-
     _product = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
@@ -48,43 +47,50 @@ class _ProductFormState extends State<ProductForm> {
       child: Column(
         children: <Widget>[
           _imageFile(),
-          _textFormField('Nombre',
+          _textFormField(
+            'Nombre',
             initialValue: _product.name,
             textInputType: TextInputType.text,
-            textCapitalization: TextCapitalization.sentences,),
-          _textFormField('Descripción',
+            textCapitalization: TextCapitalization.sentences,
+          ),
+          _textFormField(
+            'Descripción',
             initialValue: _product.description,
             textCapitalization: TextCapitalization.sentences,
-            textInputType: TextInputType.multiline,),
+            textInputType: TextInputType.multiline,
+          ),
           _textFormField('Precio',
-            initialValue: _product.price.toString(),
-            textCapitalization: TextCapitalization.none,
-            textInputType: TextInputType.numberWithOptions(decimal: true, signed: false),
-            number: true),
+              initialValue: _product.price.toString(),
+              textCapitalization: TextCapitalization.none,
+              textInputType:
+                  TextInputType.numberWithOptions(decimal: true, signed: false),
+              number: true),
           _textFormField('Cantidad',
-            initialValue: _product.stock.toString(),
-            textCapitalization: TextCapitalization.none,
-            textInputType: TextInputType.numberWithOptions(decimal: true, signed: false),
-            number: true),
+              initialValue: _product.stock.toString(),
+              textCapitalization: TextCapitalization.none,
+              textInputType:
+                  TextInputType.numberWithOptions(decimal: true, signed: false),
+              number: true),
         ],
       ),
     );
   }
 
   Widget _imageFile() {
-    return image == null 
-    ? _product.urlPhoto == null 
-        ? Image.asset('assets/no-image.png') 
-        : CachedNetworkImage(
-            imageUrl: _product.urlPhoto,
-            placeholder: (context, url) => CircularProgressIndicator(),
+    return image == null
+        ? _product.urlPhoto == null
+            ? Image.asset('assets/no-image.png')
+            : CachedNetworkImage(
+                imageUrl: _product.urlPhoto,
+                placeholder: (context, url) => CircularProgressIndicator(),
+                height: 321,
+                width: double.infinity,
+                fit: BoxFit.scaleDown)
+        : Image.file(
+            image,
+            fit: BoxFit.cover,
             height: 321,
-            width: double.infinity,
-            fit: BoxFit.scaleDown) 
-    : Image.file(
-        image,
-        fit: BoxFit.cover,
-        height: 321,);
+          );
   }
 
   Widget _textFormField(String textField,
@@ -101,8 +107,9 @@ class _ProductFormState extends State<ProductForm> {
         validator: (value) {
           return number
               ? _isNumber(value) ? null : 'Número Requerido'
-              : value == null || value == '' && textField != 'Descripción'  
-                ? 'Campo Requerido' : null;
+              : value == null || value == '' && textField != 'Descripción'
+                  ? 'Campo Requerido'
+                  : null;
         });
   }
 
@@ -112,7 +119,6 @@ class _ProductFormState extends State<ProductForm> {
         icon: Icon(Icons.photo_size_select_actual),
         onPressed: () => _getImageFile(ImageSource.gallery),
       ),
-      //
       IconButton(
         icon: Icon(Icons.camera_alt),
         onPressed: () => _getImageFile(ImageSource.camera),
@@ -124,10 +130,18 @@ class _ProductFormState extends State<ProductForm> {
 
   _onSavedFormField(String textField, String value) {
     switch (textField) {
-      case 'Nombre'     : _product.name = value;  break;
-      case 'Descripción': _product.description = value; break;
-      case 'Precio'     : _product.price = double.parse(value); break;
-      default:/* stock*/  _product.stock = double.parse(value);
+      case 'Nombre':
+        _product.name = value;
+        break;
+      case 'Descripción':
+        _product.description = value;
+        break;
+      case 'Precio':
+        _product.price = double.parse(value);
+        break;
+      default:
+        /* stock*/
+        _product.stock = double.parse(value);
     }
   }
 
@@ -137,9 +151,9 @@ class _ProductFormState extends State<ProductForm> {
     if (image == null && _product.id == null) return;
 
     _product.id == null
-      ? provider.create(_product, image)
-      : provider.update(_product, _product.id, image);
-    
+        ? provider.create(_product, image)
+        : provider.update(_product, _product.id, image);
+
     Navigator.pop(context);
   }
 
@@ -147,5 +161,4 @@ class _ProductFormState extends State<ProductForm> {
     image = await ImagePicker.pickImage(source: imageSource);
     setState(() {});
   }
-
 }

@@ -9,27 +9,27 @@ import 'package:my_app/models/product_model.dart';
 
 class ProductProvider {
   final _database = FirebaseDatabase.instance.reference().child('products');
-  final _storage = FirebaseStorage.instance.ref();
+  final _storage = FirebaseStorage.instance.ref().child('products');
 
   DatabaseReference get reference => _database;
 
   create(Product product, File image) async {
-    product.urlPhoto = await _uploadFile(image); 
+    product.urlPhoto = await _uploadFile(image);
     _database.push().set(product.toJson());
   }
-  
+
   update(Product product, String path, File image) async {
-    if (image != null){
+    if (image != null) {
       product.urlPhoto = await _uploadFile(image);
     }
     _database.child(path).update(product.toJson());
   }
-  
+
   destroy(String path) => _database.child(path).remove();
 
   Future<String> _uploadFile(File image) async {
-    final storageReference =_storage.child('products/${Path.basename(image.path)}');
+    final storageReference = _storage.child(Path.basename(image.path));
     await storageReference.putFile(image).onComplete;
     return await storageReference.getDownloadURL();
   }
-} //  end class
+}

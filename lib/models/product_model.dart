@@ -21,7 +21,7 @@ class Product {
     this.urlPhoto,
   });
 
-  factory Product.fromSnapshot({String key, Map value}) => Product(
+  factory Product.fromSnapshot(String key, Map value) => Product(
         id          : key,
         name        : value['name'],
         description : value['description'],
